@@ -1,8 +1,15 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');  // Import CORS for cross-origin requests
 const app = express();
+const port = process.env.PORT || 3000;
 
-const apiKey = 'YOUR_API_KEY'; // Replace with your Ola API key
+// Allow CORS for all requests
+app.use(cors());
+
+// Ola API credentials
+const apiKey = '96121212f12ff12f12f1f12f1f12fe2';
+const appToken = 'fd5d6121212f12ff12f12f1f12f1f12fa';
 
 app.get('/getOlaRideOptions', async (req, res) => {
     try {
@@ -11,10 +18,12 @@ app.get('/getOlaRideOptions', async (req, res) => {
         const response = await axios.get(url, {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
+                'x-app-token': appToken,
                 'Content-Type': 'application/json'
             }
         });
 
+        // Sending back the data from Ola API
         res.json(response.data);
     } catch (error) {
         console.error('Error fetching data from Ola API:', error);
@@ -22,6 +31,6 @@ app.get('/getOlaRideOptions', async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
