@@ -14,14 +14,12 @@
 
     <script>
         document.getElementById('getRides').addEventListener('click', function() {
-            // Call the function to fetch ride options
             getRideOptions();
         });
 
         function getRideOptions() {
-            const url = "https://your-server.com/getOlaRideOptions"; // Change this URL to your server-side endpoint
-            
-            // Making the API call
+            const url = "https://your-deployed-server-url/getOlaRideOptions"; // Replace with your deployed server URL
+
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -34,13 +32,17 @@
             const rideOptionsDiv = document.getElementById('rideOptions');
             rideOptionsDiv.innerHTML = '';
 
-            data.categories.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.innerHTML = `<h3>${option.display_name}</h3>
-                                       <p>Base Fare: ${option.price_details.base_fare}</p>
-                                       <p>ETA: ${option.eta} minutes</p>`;
-                rideOptionsDiv.appendChild(optionDiv);
-            });
+            if (data.categories && data.categories.length > 0) {
+                data.categories.forEach(option => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.innerHTML = `<h3>${option.display_name}</h3>
+                                           <p>Base Fare: ${option.price_details.base_fare}</p>
+                                           <p>ETA: ${option.eta} minutes</p>`;
+                    rideOptionsDiv.appendChild(optionDiv);
+                });
+            } else {
+                rideOptionsDiv.innerHTML = '<p>No ride options available.</p>';
+            }
         }
     </script>
 
